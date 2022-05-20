@@ -1,0 +1,2 @@
+\babel@toc {russian}{}
+\contentsline {section}{\numberline {A.}The double pendulum}{1}{section.1}%
