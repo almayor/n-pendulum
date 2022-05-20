@@ -1,33 +1,28 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-import numpy as np
+import argparse
+import dill
 import imageio
+import numpy as np
 import os
 import sys
-import dill
+import matplotlib.pyplot as plt
 
 from scipy.integrate import odeint
 from tqdm import tqdm
-
-import matplotlib.pyplot as plt
 
 from matplotlib.collections import LineCollection
 from matplotlib.animation import FFMpegWriter
 from matplotlib.patches import Circle
 from matplotlib import animation
 
-# import sympy as smp
-
-# from sympy.physics.mechanics import dynamicsymbols, init_vprinting
-# from sympy.solvers.solveset import linsolve
-
-# init_vprinting()
+from argparser import get_parser
 
 
 class DoublePendulum:
     
-    def __init__(self, m1, m2, l1, l2, state0, g=9.8, fun_dir="double_pend"):
+    def __init__(self, m1, m2, l1, l2, state0, g=9.8, fun_dir="data/double_pend"):
         self.m1 = m1
         self.m2 = m2
         self.l1 = l1
@@ -41,9 +36,10 @@ class DoublePendulum:
     
     def _load_sympy_funs(self, fun_dir):
         double_pend_funs = ["dz1_f", "dz2_f", "dth1_f", "dth2_f", "E_f"]
+        package_directory = os.path.dirname(os.path.abspath(__file__))
 
         for fun_name in double_pend_funs:
-            filename = os.path.join(fun_dir, f'double_pend_{fun_name}')
+            filename = os.path.join(package_directory, fun_dir, f'double_pend_{fun_name}')
             with open(filename, 'rb') as f:
                 fun = dill.load(f)
                 setattr(self, fun_name, fun)
@@ -140,22 +136,11 @@ class DoublePendulum:
             self.dth2_f(z2),
             self.dz2_f(t, g, m1, m2, l1, l2, th1, th2, z1, z2),
         ]
-    
-    
 
-# pend = DoublePendulum(1, 1, 1, 1, state0=[3*np.pi/7, 0, 3*np.pi/4, 0])
-# pend.run(t_max=40)
-# pend.plot("wow2.gif")
-# # pend.plot()
-# plt.show()
-
-
-
-# ## Triple pendulum
 
 class TriplePendulum:
     
-    def __init__(self, m1, m2, m3, l1, l2, l3, state0, g=9.8, fun_dir="triple_pend"):
+    def __init__(self, m1, m2, m3, l1, l2, l3, state0, g=9.8, fun_dir="data/triple_pend"):
         self.m1 = m1
         self.m2 = m2
         self.m3 = m3
@@ -173,9 +158,10 @@ class TriplePendulum:
     
     def _load_sympy_funs(self, fun_dir):
         triple_pend_funs = ["dz1_f", "dz2_f", "dz3_f", "dth1_f", "dth2_f", "dth3_f", "E_f"]
+        package_directory = os.path.dirname(os.path.abspath(__file__))
 
         for fun_name in triple_pend_funs:
-            filename = os.path.join(fun_dir, f'triple_pend_{fun_name}')
+            filename = os.path.join(package_directory, fun_dir, f'triple_pend_{fun_name}')
             with open(filename, 'rb') as f:
                 fun = dill.load(f)
                 setattr(self, fun_name, fun)
@@ -229,8 +215,8 @@ class TriplePendulum:
         ax.set_aspect('equal', adjustable='box')
         
         self.rods, = ax.plot([], [], lw=1, c='k')
-        # self.trail1 = [ax.plot([], [], lw=1, c='b', alpha=0, solid_capstyle='butt')[0]
-        #                for _ in range(ns)]
+#         self.trail1 = [ax.plot([], [], lw=1, c='b', alpha=0, solid_capstyle='butt')[0]
+#                        for _ in range(ns)]
         self.trail2 = [ax.plot([], [], lw=1, c='r', alpha=0, solid_capstyle='butt')[0]
                        for _ in range(ns)]
         self.trail3 = [ax.plot([], [], lw=1, c='g', alpha=0, solid_capstyle='butt')[0]
@@ -251,11 +237,11 @@ class TriplePendulum:
         
         self.ani = animation.FuncAnimation(
             fig, self._animate, frames=frames,
-            fargs=(max_trail,ns), interval=self.dt*1000/2
+            fargs=(max_trail,ns), interval=self.dt*1000*2
         )
         
         if filepath:
-            self.ani.save('test.gif',writer='pillow',fps=0.5*1/self.dt, dpi=150)                        
+            self.ani.save(filepath,writer='pillow',fps=0.5*1/self.dt, dpi=150)                        
             
     
     def _animate(self, i, max_trail, ns):
@@ -274,8 +260,8 @@ class TriplePendulum:
             imax = imin + s + 1   
             
             alpha = (j/ns)**3
-            # self.trail1[j].set_data(self.x1[imin:imax], self.y1[imin:imax])
-            # self.trail1[j].set_alpha(alpha)
+#             self.trail1[j].set_data(self.x1[imin:imax], self.y1[imin:imax])
+#             self.trail1[j].set_alpha(alpha)
             self.trail2[j].set_data(self.x2[imin:imax], self.y2[imin:imax])
             self.trail2[j].set_alpha(alpha)
             self.trail3[j].set_data(self.x3[imin:imax], self.y3[imin:imax])
@@ -292,10 +278,37 @@ class TriplePendulum:
             self.dth3_f(z3),
             self.dz3_f(t, g, m1, m2, m3, l1, l2, l3, th1, th2, th3, z1, z2, z3),
         ]
-    
 
-pend = TriplePendulum(1, 1, 1, 1, 1, 1, state0=[3*np.pi/7, 0, 3*np.pi/4, 0, 3*np.pi/4, 0])
-pend.run(t_max=10)
-# pend.plot("test.gif")
-pend.plot()
 
+
+if __name__ == "__main__":
+    parser = get_parser()
+    args = parser.parse_args()
+
+    if args.n == "2":
+        pend = DoublePendulum(
+            g=args.g,
+            m1=args.m1, m2=args.m2,
+            l1=args.l1, l2=args.l2,
+            state0=(
+                args.theta1, args.dtheta1,
+                args.theta2, args.dtheta2)
+        )
+        pend.run(t_max=args.t_max)
+        pend.plot(filepath=args.output_file)
+        plt.show()
+
+    elif args.n == "3":
+        pend = TriplePendulum(
+            g=args.g,
+            m1=args.m1, m2=args.m2, m3=args.m3,
+            l1=args.l1, l2=args.l2, l3=args.l3,
+            state0=(
+                args.theta1, args.dtheta1,
+                args.theta2, args.dtheta2,
+                args.theta3, args.dtheta3)
+        )
+        pend.run(t_max=args.t_max)
+        pend.plot(filepath=args.output_file)
+
+    plt.show()
