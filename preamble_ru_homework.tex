@@ -1,0 +1,297 @@
+%{{{ Preambule
+
+% Some basic packages
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage{textcomp}
+\usepackage[russian]{babel}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage[shortlabels]{enumitem}
+\usepackage{csquotes}
+\usepackage{changepage}
+\usepackage{hyperref}
+\usepackage[bottom]{footmisc}
+\usepackage{caption}
+\usepackage{calc}
+\usepackage{geometry}
+\geometry{a4paper,bottom=40mm,top=40mm,footskip=20mm}
+
+\usepackage{hyphenat}
+\hyphenation{ма-те-ма-ти-ка вос-ста-нав-ли-вать}
+
+% Don't indent paragraphs, leave some space between them
+\usepackage{parskip}
+
+% Hide page number when page is empty
+\usepackage{emptypage}
+\usepackage{subcaption}
+\usepackage{multicol}
+
+% Math stuff
+\usepackage{amsmath, amsfonts, mathtools, amsthm, amssymb}
+\usepackage{xfrac}
+% Fancy script capitals
+\usepackage{mathrsfs}
+\usepackage{cancel}
+% Bold math
+\usepackage{bm}
+% Some shortcuts
+\newcommand\N{\ensuremath{\mathbb{N}}}
+\newcommand\R{\ensuremath{\mathbb{R}}}
+\newcommand\Z{\ensuremath{\mathbb{Z}}}
+\renewcommand\O{\ensuremath{\emptyset}}
+\newcommand\Q{\ensuremath{\mathbb{Q}}}
+\renewcommand\C{\ensuremath{\mathbb{C}}}
+\newcommand{\E}{\ensuremath{\mathbb{E}}}  % матожидание
+\newcommand{\D}{\ensuremath{\mathsf{D}}}  % дисперсия
+\newcommand{\Prb}{\ensuremath{\mathsf{P}}}  % вероятностная мера
+\newcommand{\at}{\big\rvert}
+
+\DeclareRobustCommand{\orderof}{\ensuremath{\mathcal{O}}}
+\DeclareMathOperator*{\rk}{rk}
+\DeclareMathOperator*{\nullity}{Nullity}
+\DeclareMathOperator*{\im}{im}
+\DeclareMathOperator*{\spn}{span}
+\DeclareMathOperator*{\rnk}{rank}
+\DeclareMathOperator*{\col}{col}
+\DeclareMathOperator*{\row}{row}
+\DeclareMathOperator*{\cov}{cov}
+\DeclareMathOperator*{\erf}{erf}
+
+\renewcommand{\phi}{\varphi}  % нормальная буква фи
+\renewcommand{\le}{\leqslant}  % нормальный знак <=
+\renewcommand{\leq}{\leqslant}  % нормальный знак <=
+\renewcommand{\ge}{\geqslant}  % нормальный знак >=
+\renewcommand{\geq}{\geqslant}  % нормальный знак >=
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+
+% Easily typeset systems of equations (French package)
+\usepackage{systeme}
+
+% Put x \to \infty below \lim
+\let\svlim\lim\def\lim{\svlim\limits}
+
+%Make implies and impliedby shorter
+% \let\implies\Rightarrow
+% \let\impliedby\Leftarrow
+\let\iff\Leftrightarrow
+\let\epsilon\varepsilon
+
+% Add \contra symbol to denote contradiction
+\usepackage{stmaryrd} % for \lightning
+\newcommand\contra{\scalebox{1.5}{$\lightning$}}
+
+% horizontal rule
+\newcommand\hr{
+    \noindent\rule[0.5ex]{\linewidth}{0.5pt}
+}
+
+% Environments
+\makeatother
+% For box around Definition, Theorem, \ldots
+\usepackage{mdframed}
+
+\mdfsetup{skipabove=1em,skipbelow=1em}
+\newmdtheoremenv[nobreak=true]{consequence}{Следствие}
+\newmdtheoremenv[nobreak=true]{lemma}{Лемма}
+\newmdtheoremenv[nobreak=true]{proposition}{Proposition}
+\newmdtheoremenv{inference}{Inference}
+\newmdtheoremenv{extra}{Extra}
+\newmdtheoremenv{problem}{Задача}
+\newmdtheoremenv{surmise}{Surmise}
+\newmdtheoremenv{observation}{Наблюдение}
+\newmdtheoremenv{algorithm}{Алгоритм}
+\newmdtheoremenv{application}{Приложение}
+\newmdtheoremenv[nobreak=true]{definition}{Определение}
+
+% \theoremstyle{nonumberplain}
+\newmdtheoremenv{notation}{Обозначение}
+\newmdtheoremenv[ntheorem]{terminology}{Терминология}
+
+\theoremstyle{plain}
+\newtheorem*{motivation}{Мотивация}
+\newtheorem*{reiteration}{Повторение}
+\newtheorem*{interlude}{Interlude}
+\newtheorem*{comment}{Комментарий}
+\newtheorem*{practice}{Practice}
+\newtheorem*{question}{Вопрос}
+
+\newtheoremstyle{example}
+  {\topsep}{1em}%
+  {}{}%
+  {\itshape\bfseries}{\vspace{.5em}\newline}%
+  { }{}%
+
+\theoremstyle{example}
+\newtheorem{example}{Пример}[section]
+
+\theoremstyle{definition}
+\theoremstyle{plain}
+\newtheorem*{previouslyseen}{As previously seen}
+\newtheorem*{remark}{Замечение}
+\newtheorem*{property}{Свойство}
+\newtheorem*{intuition}{Интуиция}
+
+\newmdtheoremenv[nobreak=true]{prop}{Proposition}
+\newmdtheoremenv[nobreak=true]{theorem}{Теорема}
+\newmdtheoremenv[nobreak=true]{corollary}{Corollary}
+
+\makeatletter
+  \def\th@definition{
+  \thm@headfont{\itshape} % Heading font is italic
+  \thm@notefont{}
+}
+\makeatother
+
+\theoremstyle{definition}
+\newtheorem*{solution}{Решение}
+\newtheorem*{solution-proof}{Решение}
+\theoremstyle{plain}
+
+% End example and intermezzo environments with a small diamond (just like proof
+% environments end with a small square)
+\usepackage{etoolbox}
+\AtEndEnvironment{example}{\null\hfill$\diamond$}%
+\AtEndEnvironment{intermezzo}{\null\hfill$\diamond$}%
+\AtEndEnvironment{solution}{\null\hfill$\diamond$}%
+\AtEndEnvironment{solution-proof}{\null\hfill$\square$}%
+
+\usepackage{titlesec}
+\titlespacing*{\section}
+{0pt}{5.5ex plus 1ex minus .2ex}{3ex plus .2ex}
+\titlespacing*{\subsection}
+{0pt}{5.5ex plus 1ex minus .2ex}{4ex plus .2ex}
+
+% Exercise 
+% Usage:
+% \exercise{5}
+% \subexercise{1}
+% \subexercise{2}
+% \subexercise{3}
+% gives
+% Exercise 5
+%   Subexercise 5.1
+%   Subexercise 5.2
+%   Subexercise 5.3
+\newcommand{\exercise}[1]{%
+    \def\@exercise{#1}%
+    \subsection*{Exercise #1}
+}
+
+\newcommand{\subexercise}[1]{%
+    \subsubsection*{Exercise \@oefening.#1}
+}
+
+% These are the fancy headers
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+% LE: left even
+% RO: right odd
+% CE, CO: center even, center odd
+% My name for when I print my lecture notes to use for an open book exam.
+% \fancyhead[LE,RO]{Gilles Castel}
+
+\fancyhead[L]{\thepage} % Right odd,  Left even
+\fancyhead[R]{\name}    % Right even, Left odd
+\fancyfoot[L]{}  	 % Right odd,  Left even
+\fancyfoot[R]{}          	 % Right even, Left odd
+\fancyfoot[C]{}     	 % Center
+% \fancyfoot[C]{\leftmark}         % Center
+\setlength{\headheight}{14pt}
+
+%\makeatother
+%
+% Todonotes and inline notes in fancy boxes
+\usepackage{todonotes}
+\usepackage{tcolorbox}
+
+% Make boxes breakable
+\tcbuselibrary{breakable}
+
+\newenvironment{note}[1]{\begin{tcolorbox}[
+    arc=0mm,
+    colback=white,
+    colframe=white!65!black,
+    title=#1,
+    % fonttitle=\sffamily,
+    breakable
+]}{\end{tcolorbox}}
+
+% Figure support as explained in Gilles Castel's blog post.
+%\usepackage{import}
+%\usepackage{xifthen}
+%\usepackage{pdfpages}
+%\usepackage{transparent}
+%\newcommand{\incfig}[2][1]{%
+%    \def\svgwidth{#1\textwidth}
+%    \import{./figures/}{#2.pdf_tex}
+%}
+\usepackage{graphicx} %Loading the package
+\graphicspath{{figures/}} %Setting the graphicspath
+
+% Quotes
+\let\oldquote\quote
+\let\endoldquote\endquote
+\renewenvironment{quote}[2][]
+  {\if\relax\detokenize{#1}\relax
+     \def\quoteauthor{#2}%
+   \else
+     \def\quoteauthor{#2~---~#1}%
+   \fi
+   \oldquote}
+  {\par\nobreak\smallskip\hfill(\quoteauthor)%
+   \endoldquote\addvspace{\bigskipamount}}
+
+% Tables
+\usepackage[thinlines]{easytable}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hhline}
+\usepackage{colortbl}
+\usepackage{multirow}
+\usepackage{diagbox}
+
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}c<{$}} % math-mode version of "l" column type
+
+% Plots
+\usepackage{float}
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+% https://tex.stackexchange.com/questions/149977/how-to-make-invisible-section-header-noticeable-in-the-toc
+\makeatletter
+\newcommand\invisiblesection[1]{%
+  % \refstepcounter{section}%
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}%
+  \sectionmark{#1}\phantom{}}
+\makeatother
+
+% Code
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{mdframed}
+
+\lstset{tabsize=4}
+\definecolor{light-gray}{gray}{0.95}
+
+\lstnewenvironment{codefrag}[1]
+{\mdframed[backgroundcolor=light-gray, roundcorner=10pt,leftmargin=1,
+rightmargin=1, innerleftmargin=15, innertopmargin=10,innerbottommargin=5,
+outerlinewidth=1, linecolor=light-gray]\lstset{language=#1}}{
+\endmdframed}
+
+%% Fix some stuff
+%% http://tex.stackexchange.com/questions/76273/multiple-pdfs-with-page-group-included-in-a-single-page-warning
+%%\pdfsuppresswarningpagegroup=1
+%
+%% My name
+\author{Alex Mayorov}
+
+
+%}}}
