@@ -70,7 +70,7 @@ class DoublePendulum:
         E0 = self.E_f(self.g, self.m1, self.m2, self.l1, self.l2, *self.state0)
         for i in range(len(ans)):
             E1 = self.E_f(self.g, self.m1, self.m2, self.l1, self.l2, *ans[i])
-            if np.abs(E0 - E1) / E0 > E_drift:
+            if np.abs(E0 - E1) > E_drift:
                 sys.exit(f"Something's wrong! Maximum energy drift exceeded {E_drift}")
         
         
@@ -195,7 +195,7 @@ class TriplePendulum:
         E0 = self.E_f(self.g, self.m1, self.m2, self.m3, self.l1, self.l2, self.l3, *self.state0)
         for i in range(len(ans)):
             E1 = self.E_f(self.g, self.m1, self.m2, self.m3, self.l1, self.l2, self.l3, *ans[i])
-            if np.abs(E0 - E1) / E0 > E_drift:
+            if np.abs(E0 - E1) > E_drift:
                 sys.exit(f"Something's wrong! Maximum energy drift exceeded {E_drift}")
         
         
