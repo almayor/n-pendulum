@@ -74,13 +74,16 @@ class DoublePendulum:
                 sys.exit(f"Something's wrong! Maximum energy drift exceeded {E_drift}")
         
         
-    def plot(self, filepath=None, fps=30, max_trail=100, ns=20): 
+    def plot(self, filepath=None, fps=30, max_trail=100, ns=20, fig=None): 
         r0 = 0.03
         r1 = 0.01 + np.clip(self.m1, 1, 10) * 0.05
         r2 = 0.01 + np.clip(self.m2, 1, 10) * 0.05
             
-        fig = plt.figure(facecolor="w", figsize=(6.25 / 2, 6.25 / 2), dpi=100)
-        ax = fig.add_subplot(111)
+        if fig is None:
+            fig = plt.figure(facecolor="w", figsize=(6.25 / 2, 6.25 / 2), dpi=100)
+            ax = fig.add_subplot(111)
+        else:
+            [ax] = fig.axes
         
         ax.set_axis_off()
         ax.set_xlim(-self.l1-self.l2-max(r1, r2), self.l1+self.l2+max(r1, r2))
@@ -199,14 +202,17 @@ class TriplePendulum:
                 sys.exit(f"Something's wrong! Maximum energy drift exceeded {E_drift}")
         
         
-    def plot(self, filepath=None, fps=30, max_trail=100, ns=20): 
+    def plot(self, filepath=None, fps=30, max_trail=100, ns=20, fig=None): 
         r0 = 0.03
         r1 = 0.01 + np.clip(self.m1, 1, 10) * 0.05
         r2 = 0.01 + np.clip(self.m2, 1, 10) * 0.05
         r3 = 0.01 + np.clip(self.m3, 1, 10) * 0.05
             
-        fig = plt.figure(facecolor="w", figsize=(6.25 / 2, 6.25 / 2), dpi=100)
-        ax = fig.add_subplot(111)
+        if fig is None:
+            fig = plt.figure(facecolor="w", figsize=(6.25 / 2, 6.25 / 2), dpi=100)
+            ax = fig.add_subplot(111)
+        else:
+            [ax] = fig.axes
         
         ax.set_axis_off()
         lim = self.l1+self.l2+self.l3+max(r1, r2, r3)
