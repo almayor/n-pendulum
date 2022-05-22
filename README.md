@@ -1,5 +1,14 @@
 # n-pendulum
 
+![](examples/warning.svg)
+
+**This is an experimental branch! It allows running multiple pendulums on a single plot but it can't save the resulting animation.**
+
+**In order to run multiple pendulums, separate arguments by spaces. For example
+`./n-pendulum.py 2 -m1 1 1.5 -m2 2 -l1 0.8 0.9` would create two pendulums: one having `m1=1, m2=2, l1=0.8` and the other one having `m1=1.5, m2=2, l1=0.9`.**
+
+***
+
 This is a simple project studying the behaviour of simple chaotic systems using the Largrangian formulation. In particular, I implement a small plotter of a double and triple pendulum admitting a wide range of initial conditions using Matplotlib and SymPy.
 
 ## Usage
