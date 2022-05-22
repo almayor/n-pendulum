@@ -17,7 +17,7 @@ from matplotlib.animation import FFMpegWriter
 from matplotlib.patches import Circle
 from matplotlib import animation
 
-from argparser import get_parser
+from parse_args import parse_args
 
 
 class DoublePendulum:
@@ -288,33 +288,34 @@ class TriplePendulum:
 
 
 if __name__ == "__main__":
-    parser = get_parser()
-    args = parser.parse_args()
+    args_list = parse_args()
+    fig = plt.figure(facecolor="w", figsize=(6.25 / 2, 6.25 / 2), dpi=100)
+    ax = fig.add_subplot(111)
 
-    if args.n == "2":
-        pend = DoublePendulum(
-            g=args.g,
-            m1=args.m1, m2=args.m2,
-            l1=args.l1, l2=args.l2,
-            state0=(
-                args.theta1, args.dtheta1,
-                args.theta2, args.dtheta2)
-        )
-        pend.run(t_max=args.t_max)
-        pend.plot(filepath=args.output_file)
-        plt.show()
+    pends = []
+    for args in args_list:
+        if args['n'] == "2":
+            pend = DoublePendulum(
+                g=args['g'],
+                m1=args['m1'], m2=args['m2'],
+                l1=args['l1'], l2=args['l2'],
+                state0=(
+                    args['theta1'], args['dtheta1'],
+                    args['theta2'], args['dtheta2'])
+            )
+        elif args['n'] == "3":
+            pend = TriplePendulum(
+                g=args['g'],
+                m1=args['m1'], m2=args['m2'], m3=args['m3'],
+                l1=args['l1'], l2=args['l2'], l3=args['l3'],
+                state0=(
+                    args['theta1'], args['dtheta1'],
+                    args['theta2'], args['dtheta2'],
+                    args['theta3'], args['dtheta3'])
+            )
 
-    elif args.n == "3":
-        pend = TriplePendulum(
-            g=args.g,
-            m1=args.m1, m2=args.m2, m3=args.m3,
-            l1=args.l1, l2=args.l2, l3=args.l3,
-            state0=(
-                args.theta1, args.dtheta1,
-                args.theta2, args.dtheta2,
-                args.theta3, args.dtheta3)
-        )
-        pend.run(t_max=args.t_max)
-        pend.plot(filepath=args.output_file)
+        pend.run(t_max=args['t_max'])
+        pend.plot(fig=fig)
+        pends.append(pend)
 
     plt.show()
