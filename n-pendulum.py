@@ -153,7 +153,7 @@ class TriplePendulum:
         self.l3 = l3
         
         self.state0 = state0
-        self.g = g 
+        self.g = g
 
         #loading precomputed ODE with SymPy
         self._load_sympy_funs(fun_dir)

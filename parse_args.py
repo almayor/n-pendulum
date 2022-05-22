@@ -22,7 +22,7 @@ def positive_int(value):
 
 def configure_dubl_parser(dubl_parser):
     dubl_parser.add_argument(
-        '-g', dest="g", type=positive_int, nargs='+',
+        '-g', dest="g", type=float, nargs='+',
         default=9.8, help='gravitational constant (or list of)'
     )
     dubl_parser.add_argument(
@@ -78,7 +78,7 @@ def configure_dubl_parser(dubl_parser):
 
 def configure_trpl_parser(trpl_parser):
     trpl_parser.add_argument(
-        '-g', dest="g", type=positive_int, nargs='+',
+        '-g', dest="g", type=float, nargs='+',
         default=9.8, help='gravitational constant (or list of)'
     )
     trpl_parser.add_argument(
@@ -96,7 +96,7 @@ def configure_trpl_parser(trpl_parser):
     init_vel = trpl_parser.add_argument_group('initial velocities')
 
     masses.add_argument(
-        '-m1', dest="m1", type=positive_int, nargs='+',
+        '-m1', dest="m1", type=float, nargs='+',
         default=1, help='mass of first body (or list of)'
     )
     masses.add_argument(
@@ -183,7 +183,15 @@ def parse_args():
     parser = get_parser()
     args = vars(parser.parse_args())
 
-    dol = {k: v if isinstance(v, list) else cycle([v]) for (k, v) in args.items()}
+    dol = {}
+    for k, v in args.items():
+        if not isinstance(v, list):
+            dol[k] = cycle([v])
+        elif len(v) == 1:
+            dol[k] = cycle(v)
+        else:
+            dol[k] = v
+        
     return dol_to_lod(dol)
 
 
