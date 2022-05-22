@@ -1,6 +1,6 @@
 # n-pendulum
 
-![](examples/warning.svg)
+![](examples/warning.png)
 
 **This is an experimental branch! It allows running multiple pendulums on a single plot but it can't save the resulting animation.**
 
